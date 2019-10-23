@@ -8,8 +8,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/MashiroC/begonia"
 	"github.com/MashiroC/begonia-rpc/entity"
+	"github.com/MashiroC/begonia-sdk"
 	"log"
 	"reflect"
 )
@@ -29,63 +29,60 @@ type Person struct {
 	Child PersonChild
 }
 
-
 func (hs *HelloService) TestInt(a, b int) int {
-	fmt.Println(a,b)
+	fmt.Println(a, b)
 	return a + b
 }
 
-func (hs *HelloService) TestIntWithErr(a,b int) (int,error){
-	return 0,nil
+func (hs *HelloService) TestIntWithErr(a, b int) (int, error) {
+	return 0, nil
 }
 
-func (hs *HelloService) TestUint(a,b uint) uint{
-	fmt.Println(a,b)
-	return a+b
+func (hs *HelloService) TestUint(a, b uint) uint {
+	fmt.Println(a, b)
+	return a + b
 }
 
-func (hs *HelloService) TestInt8(a,b int8) int8 {
-	fmt.Println(a,b)
-	return a+b
+func (hs *HelloService) TestInt8(a, b int8) int8 {
+	fmt.Println(a, b)
+	return a + b
 }
 
-func (hs *HelloService) TestUint8(a,b uint8) uint8{
-	fmt.Println(a,b)
-	return a+b
+func (hs *HelloService) TestUint8(a, b uint8) uint8 {
+	fmt.Println(a, b)
+	return a + b
 }
 
-func (hs *HelloService) TestFloat64(a,b float64) float64{
-	fmt.Println(a,b)
-	return a*b
+func (hs *HelloService) TestFloat64(a, b float64) float64 {
+	fmt.Println(a, b)
+	return a * b
 }
 
-func (hs *HelloService) TestFloat32(a,b float32) float32{
-	fmt.Println(a,b)
-	return a*b
+func (hs *HelloService) TestFloat32(a, b float32) float32 {
+	fmt.Println(a, b)
+	return a * b
 }
 
-func (hs *HelloService) TestStruct(per Person) Person{
+func (hs *HelloService) TestStruct(per Person) Person {
 	fmt.Println(per)
-	per.Child=PersonChild{Test:"test"}
+	per.Child = PersonChild{Test: "test"}
 	return per
 }
 
-func (hs *HelloService) TestStructWithErr(per Person) (Person,error){
+func (hs *HelloService) TestStructWithErr(per Person) (Person, error) {
 	fmt.Println(per)
-	return Person{},errors.New("testErr")
+	return Person{}, errors.New("testErr")
 }
-
 
 func (hs *HelloService) TestEmpty(per Person) {
 	fmt.Println(per)
 }
 
-func (hs *HelloService) TestEmptyWithErr(test string) error{
-	return entity.CallError{ErrCode:"123456789",ErrMessage:"testError"}
+func (hs *HelloService) TestEmptyWithErr(test string) error {
+	return entity.CallError{ErrCode: "123456789", ErrMessage: "testError"}
 }
 
 //func (hs *HelloService) TestIntWithErr(a,b int)
-
 
 func (hs *HelloService) World() (res string) {
 	return "helloworld!"

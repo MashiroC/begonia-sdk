@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/MashiroC/begonia"
+	"github.com/MashiroC/begonia-sdk"
 )
 
 // main.go something

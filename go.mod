@@ -1,4 +1,4 @@
-module github.com/MashiroC/begonia
+module github.com/MashiroC/begonia-sdk
 
 go 1.12
 
