@@ -24,6 +24,9 @@ type rResult struct {
 }
 
 func (r rResult) Bind(target interface{}) (err error) {
+	if r.Err!=nil{
+		return r.Err
+	}
 	t:=reflect.TypeOf(target)
 	v:=reflect.ValueOf(target)
 	if t.Kind()!=reflect.Ptr{
