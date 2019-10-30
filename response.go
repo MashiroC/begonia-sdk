@@ -4,7 +4,9 @@
 // begonia
 package begonia
 
-import "github.com/MashiroC/begonia-rpc/entity"
+import (
+	"github.com/MashiroC/begonia-rpc/entity"
+)
 
 // response.go something
 
@@ -14,8 +16,8 @@ type ResponseHandler struct {
 
 func (h *ResponseHandler) signCallback(uuid string) (CallbackChan, error) {
 	ch := make(CallbackChan, 1)
-	h.cbMap.Set(uuid, func(resp interface{},model int) {
-		cbEntity :=CallbackEntity{
+	h.cbMap.Set(uuid, func(resp interface{}, model int) {
+		cbEntity := CallbackEntity{
 			model: model,
 			data:  resp,
 		}
@@ -33,25 +35,21 @@ func (h *ResponseHandler) callback(uuid string, params interface{}) (err error) 
 		return
 	}
 
-	f(params,entity.NormalResponse)
+	f(params, entity.NormalResponse)
 
 	return
 }
 
-func (h *ResponseHandler) callbackErr(uuid string,data map[string]interface{}) (err error) {
+func (h *ResponseHandler) callbackErr(uuid string, cErr entity.CallError) (err error) {
 	f, ok := h.cbMap.Get(uuid)
 	if !ok {
 		return entity.CallbackNotSignedErr
 	}
-	cErr:=entity.CallError{
-		ErrCode:    data["errCode"].(string),
-		ErrMessage: data["errMsg"].(string),
-	}
-	f(cErr,entity.ErrorResponse)
+	f(cErr, entity.ErrorResponse)
 
 	return
 }
 
 func defaultResponseHandler() *ResponseHandler {
-	return &ResponseHandler{cbMap:NewWaitChan(5)}
+	return &ResponseHandler{cbMap: NewWaitChan(5)}
 }

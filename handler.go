@@ -82,7 +82,9 @@ func (cli *Client) handlerResponse(data []byte) {
 	} else if form.Type == entity.ErrorResponse {
 
 		// 错误回调
-		if err := cli.resp.callbackErr(form.Uuid, form.Data.(map[string]interface{})); err != nil {
+		data := form.Data.(map[string]interface{})
+		cErr := entity.NewError(data["errCode"].(string), data["errMsg"].(string))
+		if err := cli.resp.callbackErr(form.Uuid, cErr); err != nil {
 			cli.respError(form.Uuid, err)
 			return
 		}
@@ -116,5 +118,6 @@ func (cli *Client) handlerError(data []byte) {
 		ErrMessage: form.ErrMsg,
 	}
 
+	_ = cli.resp.callbackErr(form.Uuid, cErr)
 	log.Error("received some error %s", cErr.Error())
 }

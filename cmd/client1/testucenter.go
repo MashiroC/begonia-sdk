@@ -21,7 +21,7 @@ var (
 )
 
 func main() {
-	res, err := Verify("2017211573", "020311")
+	res, err := Verify("2017211573", "02031X")
 	fmt.Println(res, err)
 
 	//res, err = FindStudent("xbs", "testopenid")
