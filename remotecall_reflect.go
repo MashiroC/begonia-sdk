@@ -40,7 +40,7 @@ func parseNum(num float64, kind string) (res reflect.Value) {
 	case "float64":
 		tmp = num
 	}
-	res=reflect.ValueOf(tmp)
+	res = reflect.ValueOf(tmp)
 	return
 }
 
@@ -58,17 +58,16 @@ func parseParam(inType []reflect.Type, obj []interface{}) (res []reflect.Value, 
 
 		if kind == "struct" {
 			// struct会变成map[string]interface{} 这里变回结构体
-			value,er:=parseStruct(param,in)
-			if er!=nil{
-				err =er
+			value, er := parseStruct(param, in)
+			if er != nil {
+				err = er
 				return
 			}
-			res[i]=value
+			res[i] = value
 			continue
 		}
 
-		res[i]=reflect.ValueOf(param)
-
+		res[i] = reflect.ValueOf(param)
 
 	}
 
@@ -84,35 +83,40 @@ func parseStruct(param interface{}, inType reflect.Type) (value reflect.Value, e
 
 	obj := reflect.New(inType)
 
+	if err = parseMapToStruct(inType, param.(map[string]interface{}), obj); err != nil {
+		return
+	}
+
+	return obj.Elem(), nil
+}
+
+func parseMapToStruct(inType reflect.Type, param map[string]interface{}, obj reflect.Value) (err error) {
 	for i := 0; i < inType.NumField(); i++ {
 		var fieldValue reflect.Value
 		f := inType.Field(i)
 		name := f.Type.Kind().String()
 		if name == "string" {
-			fieldValue = parseStringField(param.(map[string]interface{}), f)
+			fieldValue = parseStringField(param, f)
 		} else if name == "struct" {
-			tmp := param.(map[string]interface{})
 			key := f.Name
 			if tag := f.Tag.Get("json"); tag != "" {
 				key = tag
 			}
-			fieldValue, err = parseStruct(tmp[key], f.Type)
+			fieldValue, err = parseStruct(param[key], f.Type)
 			if err != nil {
 				return
 			}
 		} else {
-			tmp := param.(map[string]interface{})
 			key := f.Name
 			if tag := f.Tag.Get("json"); tag != "" {
 				key = tag
 			}
-			fieldValue = parseNum(tmp[key].(float64), f.Type.Name())
+			fieldValue = parseNum(param[key].(float64), f.Type.Name())
 		}
 
 		obj.Elem().Field(i).Set(fieldValue)
 	}
-
-	return obj.Elem(), nil
+	return
 }
 
 func parseToInterface(value []reflect.Value) (res []interface{}) {

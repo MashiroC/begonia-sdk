@@ -14,7 +14,7 @@ import (
 	"reflect"
 )
 
-// main.go something
+// testkeycenter.go something
 
 type HelloService struct {
 }
